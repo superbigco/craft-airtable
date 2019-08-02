@@ -1,0 +1,45 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Subscription Emails plugin for Craft CMS 3.x
+ *
+ * Subscription Emails Settings.twig
+ *
+ * @author    Superbig
+ * @copyright Copyright (c) 2019 Superbig
+ * @link      https://superbig.co
+ * @package   SubscriptionEmails
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{{ forms.autosuggestField({
+    first: true,
+    label: 'API key',
+    instructions: 'Locate this at [https://airtable.com/account](https://airtable.com/account).',
+    id: 'apiKey',
+    name: 'apiKey',
+    suggestEnvVars: true,
+    value: settings['apiKey']})
+}}
+
+{{ forms.autosuggestField({
+    first: true,
+    label: 'Base',
+    instructions: 'Locate this at [https://airtable.com/api](https://airtable.com/api).',
+    id: 'apiKey',
+    name: 'apiKey',
+    suggestEnvVars: true,
+    value: settings['apiKey']})
+}}
+
+{{ forms.autosuggestField({
+    label: 'Default table',
+    instructions: 'The plugin will query against this table by default if not defined elsewhere.',
+    id: 'defaultTable',
+    name: 'defaultTable',
+    suggestEnvVars: true,
+    value: settings['defaultTable']})
+}}

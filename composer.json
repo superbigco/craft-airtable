@@ -1,0 +1,41 @@
+{
+  "name": "superbig/craft-airtable",
+  "description": "Sweet saving and fetching of data with Airtable",
+  "type": "craft-plugin",
+  "version": "1.0.0",
+  "keywords": [
+    "craft",
+    "cms",
+    "craftcms",
+    "craft-plugin",
+    "airtable"
+  ],
+  "support": {
+    "docs": "https://github.com/superbigco/craft-airtable/blob/master/README.md",
+    "issues": "https://github.com/superbigco/craft-airtable/issues"
+  },
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Superbig",
+      "homepage": "https://superbig.co"
+    }
+  ],
+  "require": {
+    "craftcms/cms": "^3.0",
+    "armetiz/airtable-php": "^0.3.2",
+  },
+  "autoload": {
+    "psr-4": {
+      "superbig\\airtable\\": "src/"
+    }
+  },
+  "extra": {
+    "name": "Airtable",
+    "handle": "airtable",
+    "hasCpSettings": true,
+    "hasCpSection": false,
+    "changelogUrl": "https://raw.githubusercontent.com/superbigco/craft-airtable/master/CHANGELOG.md",
+    "class": "superbig\\airtable\\Airtable"
+  }
+}
