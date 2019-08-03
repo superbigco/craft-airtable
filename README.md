@@ -51,9 +51,10 @@ _Example form_
 
 ```twig
 <form method="post" accept-charset="UTF-8">
-    {{ getCsrfInput() }}
+    {{ csrfInput() }}
+    {{ redirectInput('airtable?success={Name}') }}
     <input type="hidden" name="action" value="airtable/save">
-    <input type="hidden" name="redirect" value="airtable?success={Name}">
+    <input type="hidden" name="table" value="{{ 'Content'|hash }}">
     <input type="hidden" name="enabled" value="1">
 
     {% macro errorList(errors) %}

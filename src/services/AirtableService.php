@@ -64,6 +64,9 @@ class AirtableService extends Component
         return $this;
     }
 
+    /**
+     * @return Form
+     */
     public function filteredContent()
     {
         $form = new Form([
@@ -73,6 +76,11 @@ class AirtableService extends Component
         // Get fields
         $fields  = $this->getFields();
         $request = Craft::$app->getRequest();
+
+        $unverifiedTableParam = $request->getParam('table');
+        if ($table = Craft::$app->getSecurity()->validateData($unverifiedTableParam)) {
+            $form->setTable($table);
+        }
 
         foreach ($fields as $id) {
             if (\is_string($id)) {
@@ -89,10 +97,6 @@ class AirtableService extends Component
             }
 
             $value = $request->getParam($field->id);
-
-            if ($field->type === 'checkbox') {
-                $value = !empty($value);
-            }
 
             $form->addField($field);
             $form->setField($field->id, $value);
@@ -112,17 +116,17 @@ class AirtableService extends Component
         }
     }
 
-    public function saveOrUpdate(Form $model, $id = null)
+    public function saveOrUpdate(Form $form, $id = null)
     {
         $criteria = [];
-        $data     = $model->getFields();
+        $data     = $form->getData();
 
         // Process dates
-        foreach ($this->getDateFields() as $config) {
-            $key   = $config['id'];
-            $value = $data[ $key ];
+        foreach ($form->getDateFields() as $field) {
+            $key   = $field->id;
+            $value = $data[ $key ] ?? null;
 
-            if ($value instanceof DateTime) {
+            if ($value && $value instanceof DateTime) {
                 $data[ $key ] = $value->format(DateTime::ISO8601);
             }
         }
@@ -139,7 +143,7 @@ class AirtableService extends Component
                 $this->getClient()->createRecord($this->table, $data);
             }
         } catch (\Exception $e) {
-            $model->addError('server', $e->getMessage());
+            $form->addError('server', $e->getMessage());
         }
     }
 
@@ -169,16 +173,5 @@ class AirtableService extends Component
         $fields = $this->allowedFields;
 
         return $fields;
-    }
-
-    public function getDateFields()
-    {
-        $fields = $this->getFields();
-
-        return array_filter($fields, function($value, $key) {
-            if (is_array($value) && isset($value['type']) && $value['type'] == 'date') {
-                return true;
-            }
-        }, ARRAY_FILTER_USE_BOTH);
     }
 }

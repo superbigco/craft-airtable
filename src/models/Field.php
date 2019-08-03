@@ -22,6 +22,15 @@ use craft\base\Model;
  */
 class Field extends Model
 {
+    const TYPE_NUMBER      = 'number';
+    const TYPE_EMAIL       = 'email';
+    const TYPE_MULTISELECT = 'multiselect';
+    const TYPE_DATETIME    = 'datetime';
+    const TYPE_SELECT      = 'select';
+    const TYPE_STRING      = 'string';
+    const TYPE_DATE        = 'date';
+    const TYPE_CHECKBOX    = 'checkbox';
+
     // Public Properties
     // =========================================================================
 

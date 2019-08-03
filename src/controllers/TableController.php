@@ -11,6 +11,7 @@
 namespace superbig\airtable\controllers;
 
 use superbig\airtable\Airtable;
+use superbig\airtable\models\Form;
 use superbig\subscriptionemails\SubscriptionEmails;
 
 use Craft;
@@ -38,40 +39,46 @@ class TableController extends Controller
     // =========================================================================
 
     /**
+     * @return \yii\web\Response
+     * @throws \craft\errors\MissingComponentException
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionSave()
     {
-        $content = Airtable::$plugin->getService()->filteredContent();
+        $form = Airtable::$plugin->getService()->filteredContent();
 
         // Validate
-        if (!$content->validate()) {
-            $this->returnErrors($content);
+        if (!$form->validate()) {
+            return $this->returnErrors($form);
         }
 
-        if (!$content->hasErrors()) {
-            $response = Airtable::$plugin->getService()->saveOrUpdate($content);
+        if (!$form->hasErrors()) {
+            Airtable::$plugin->getService()->saveOrUpdate($form);
 
             // Check for errors from the API
-            if ($content->hasErrors()) {
-                $this->returnErrors($content);
+            if ($form->hasErrors()) {
+                return $this->returnErrors($form);
             }
             else {
-                $this->returnSuccess($content);
+                return $this->returnSuccess($form);
             }
-
         }
     }
 
     /**
      * Returns a 'success' response.
      *
-     * @param $entry
+     * @param $model
      *
-     * @return void
+     * @return \yii\web\Response
+     * @throws \craft\errors\MissingComponentException
+     * @throws \yii\web\BadRequestHttpException
      */
-    private function returnSuccess($model)
+    private function returnSuccess(Form $model)
     {
-        //$successEvent = new GuestEntriesEvent($this, array( 'entry' => $entry, 'faked' => $faked ));
+        $return = [
+        ];
 
         if (Craft::$app->getRequest()->getIsAjax()) {
             $return['success'] = true;
@@ -79,14 +86,13 @@ class TableController extends Controller
             //$return['id']      = $entry->id;
             return $this->asJson($return);
         }
-        else {
-            Craft::$app->getSession()->setNotice(Craft::t('airtable', 'Submission saved.'));
 
-            return $this->redirectToPostedUrl($model);
-        }
+        Craft::$app->getSession()->setNotice(Craft::t('airtable', 'Submission saved.'));
+
+        return $this->redirectToPostedUrl($model->getData());
     }
 
-    public function returnErrors($model)
+    public function returnErrors(Form $model)
     {
         //$errorEvent = new GuestEntriesEvent($this, array( 'entry' => $entry ));
         //craft()->guestEntries->onError($errorEvent);
