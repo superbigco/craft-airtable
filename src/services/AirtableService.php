@@ -108,7 +108,7 @@ class AirtableService extends Component
     public function find($criteria = [])
     {
         try {
-            $records = $this->getClient()->findRecords($this->table, $criteria);
+            $records = $this->getClient()->findRecords($this->getTableName(), $criteria);
 
             return $records;
         } catch (\Exception $e) {
@@ -149,12 +149,12 @@ class AirtableService extends Component
 
     public function clear()
     {
-        return $this->getClient()->flushRecords($this->table);
+        return $this->getClient()->flushRecords($this->getTableName());
     }
 
     public function delete($id)
     {
-        return $this->getClient()->deleteRecord($this->table, ["Id" => $id]);
+        return $this->getClient()->deleteRecord($this->getTableName(), ["Id" => $id]);
     }
 
     public function getClient()
@@ -173,5 +173,19 @@ class AirtableService extends Component
         $fields = $this->allowedFields;
 
         return $fields;
+    }
+
+    public function getTableName()
+    {
+        return $this->formatTable($this->table);
+    }
+
+    public function formatTable(string $table = '')
+    {
+        return \str_replace([
+            ' ',
+        ], [
+            '%20',
+        ], $table);
     }
 }
