@@ -219,5 +219,6 @@ Some things to do, and ideas for potential features:
 
 * Support attachments
 * Add logging
+* Caching
 
 Brought to you by [Superbig](https://superbig.co)
