@@ -17,6 +17,7 @@ use superbig\airtable\models\Form;
 
 use Craft;
 use craft\base\Component;
+use superbig\airtable\models\Records;
 
 /**
  * @author    Superbig
@@ -110,7 +111,7 @@ class AirtableService extends Component
         try {
             $records = $this->getClient()->findRecords($this->getTableName(), $criteria);
 
-            return $records;
+            return Records::fromRecords($records);
         } catch (\Exception $e) {
             return [];
         }

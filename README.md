@@ -167,7 +167,7 @@ _Example form_
 _Find records in table_
 ```twig
 {% set records = craft.airtable.records.table('contacts').find() %}
-{% if records | length %}
+{% if records.getData() | length %}
     <table>
         <thead>
         <tr>
@@ -176,12 +176,11 @@ _Find records in table_
             <th>Date</th>
         </tr>
         </thead>
-    {% for record in records %}
-        {% set fields = record.getFields() %}
+    {% for record in records.getData() %}
         <tr>
-            <td>{{ fields['Name']|default('') }}</td>
-            <td>{{ fields['E-mail']|default('') }}</td>
-            <td>{{ fields['Date']|default('') }}</td>
+            <td>{{ record['Name']|default('') }}</td>
+            <td>{{ record['E-mail']|default('') }}</td>
+            <td>{{ record['Date']|default('') }}</td>
         </tr>
     {% endfor %}
     </table>
@@ -194,7 +193,7 @@ _Find records in table with criteria_
 {% set records = craft.airtable.records.table('contacts').find({
     'Name': 'Thomas'
 }) %}
-{% if records | length %}
+{% if records.getData() | length %}
     <table>
         <thead>
         <tr>
@@ -203,12 +202,11 @@ _Find records in table with criteria_
             <th>Date</th>
         </tr>
         </thead>
-        {% for record in records %}
-            {% set fields = record.getFields() %}
+        {% for record in records.getData()  %}
             <tr>
-                <td>{{ fields['Name']|default('') }}</td>
-                <td>{{ fields['E-mail']|default('') }}</td>
-                <td>{{ fields['Date']|default('') }}</td>
+                <td>{{ record['Name']|default('') }}</td>
+                <td>{{ record['E-mail']|default('') }}</td>
+                <td>{{ record['Date']|default('') }}</td>
             </tr>
         {% endfor %}
     </table>
