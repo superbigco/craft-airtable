@@ -47,6 +47,17 @@ return [
 
 ## Using Airtable
 
+To get records from a table:
+
+```twig
+{% set records = craft.airtable.records.table('contacts').find() %}
+```
+
+To change base
+```twig
+{% set records = craft.airtable.records.base('appvv0LuV2oP5AsS').table('Equipment').find() %}
+```
+
 _Example form_
 
 ```twig
